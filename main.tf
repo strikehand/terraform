@@ -60,7 +60,10 @@ resource "yandex_compute_instance" "slave1" {
                   - git
                   - curl
                 EOF
-              }
+              
+    ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
+  }      
+
 }
 
 # Создание второй ВМ (slave2)
@@ -95,9 +98,4 @@ resource "yandex_compute_instance" "slave2" {
                   - curl
                 EOF
               }
-}
-
-# Получение образа Ubuntu для создания ВМ 
-data "yandex_compute_image" "ubuntu" {
-  family = "ubuntu-2004-lts"
 }
