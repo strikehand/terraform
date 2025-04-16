@@ -97,5 +97,8 @@ resource "yandex_compute_instance" "slave2" {
                   - git
                   - curl
                 EOF
-              }
+              
+    ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
+
+  }
 }
