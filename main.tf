@@ -30,7 +30,7 @@ data "yandex_compute_image" "ubuntu_image" {
 
 # Создание первой ВМ (slave1)
 resource "yandex_compute_instance" "slave1" {
-  name        = "slave1"
+  name        = var.vm1_name
   zone        = "ru-central1-a"
 
   resources {
@@ -62,13 +62,20 @@ resource "yandex_compute_instance" "slave1" {
                 EOF
               
     ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
+
+    user_data = <<-EOF
+                #!/bin/bash
+                echo '${var.vm1_name}' > /etc/hostname
+                hostnamectl set-hostname ${var.vm1_name}
+                EOF
+  
   }      
 
 }
 
 # Создание второй ВМ (slave2)
 resource "yandex_compute_instance" "slave2" {
-  name        = "slave2"
+  name        = var.vm2_name
   zone        = "ru-central1-a"
 
   resources {
@@ -99,6 +106,12 @@ resource "yandex_compute_instance" "slave2" {
                 EOF
               
     ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
-
+    
+    user_data = <<-EOF
+                #!/bin/bash
+                echo '${var.vm2_name}' > /etc/hostname
+                hostnamectl set-hostname ${var.vm2_name}
+                EOF
   }
+
 }
